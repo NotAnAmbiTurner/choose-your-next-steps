@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<head>
+  <meta charset="UTF-8">
+  <title>Unit 4 Project</title>
+  <link rel="stylesheet" href="css/css.css">
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        $(".jQ").click(function() {
+            switch_JS(event.target);
+        });
+    });
+  </script>
+  <style>
+    header {
+        table-align: center;
+        text-align: center;
+        background-color: rgba(0,0,0,0.3);
+        padding: 0 auto;
+    }
+    table {
+        margin: 0 auto;
+    }
+    td {
+        text-align: right;
+        
+    }
+  </style>
+</head>
+<body>
+    <header id = "bg_head">
+        <hr>
+            <p>- Header Background Color Controller -</p>
+            <table>
+                <tr>
+                    <td>Javascript Controller:</td>
+                    <td class="JS">Red
+                        <input id="JSRed" type="hidden" value="false">
+                    </td>
+                    <td class="JS">Green
+                        <input id="JSGreen" type="hidden" value="false">
+                    </td>
+                    <td class="JS">Blue
+                        <input id="JSBlue" type="hidden" value="false">
+                    </td>
+                   <td class="JS">Opacity
+                        <input id="JSOpacity" type="hidden" value="false">
+                    </td>
+                </tr>
+                <tr>
+                    <td>jQuery Controller:</td>
+                    <td class="jQ" value=false>Red
+                        <input id="jQRed" type="hidden" value="false">
+                    </td>
+                    <td class="jQ" value=false>Green
+                        <input id="jQGreen" type="hidden" value="false">
+                    </td>
+                    <td class="jQ" value=false>Blue
+                        <input id="jQBlue" type="hidden" value="false">
+                    </td>
+                    <td class="jQ">Opacity
+                        <input id="jQOpacity" type="hidden" value="false">
+                    </td>
+                <tr>
+            </table>
+            <span>RGB value: <span id='rgb_disp'>rgb(0,0,0,0.3)</span></span>
+            <br><br>
+            <span><b>NOTES IN THE JAVASCRIPT CONSOLE</b></span>
+        <hr>
+    </header>
+    <div class="main_div">
+    
+    {% block toc %}
+
+    {% endblock %}
+    
+    
+    {% block main_content %}
+
+    {% endblock %}
+    
+    
+    {% block change_page %}
+
+    {% endblock %}
+    
+    </div>
+<footer style="text-align: center"><hr>Unit 4 Project Submission - Brandon Hastings<hr></footer>
+<script>
+
+var JS_elements = document.getElementsByClassName("JS");
+
+for (y = 0; y < JS_elements.length; y++){
+    x = JS_elements[y].getElementsByTagName("input")[0];
+    
+    JS_elements[y].addEventListener('click', function() {
+        switch_JS(this);
+    });
+}
+
+function true_switch(val) {
+    if (val == 'true') {
+        return 'false';
+    } else if (val == 'false') {
+        return 'true';
+    } else {
+        alert("Error in the true_switch routine.");
+    }
+}
+
+function switch_JS(domobj) {
+    // takes as input an HTML object, and switched the value from true to false, or from false to true; calls the routine for rendering the background color
+    val = domobj.getElementsByTagName("input")[0].value;
+    domobj.getElementsByTagName("input")[0].value = true_switch(val);
+    console.log("switch_JS works! Hidden Value of " + domobj.getElementsByTagName("input")[0].id + " now: " + domobj.getElementsByTagName("input")[0].value + " with data type: " + typeof domobj.getElementsByTagName("input")[0].value);
+
+    render_bg();
+}
+
+function return_bg_val(val) {
+    if (val == 'true') {
+        return 122;
+    } else if (val == 'false') {
+        return 0;
+    } else {
+        console.log("error in return_bg_val")
+    }
+}
+
+function return_opacity(val) {
+    if (val == 'true') {
+        return .35;
+    } else if (val == 'false') {
+        return 0;
+    } else {
+        console.log("error in return_bg_val")
+    }
+}
+
+    
+function render_bg(){
+    
+    redval = 0;
+    blueval = 0;
+    greenval = 0;
+    opacityval = .3;
+    
+    input_elements = document.getElementsByTagName("input")
+    
+    for (var i = 0; i < input_elements.length; i++) {
+        // console.log(" input_elements[i].id: " + input_elements[i].id);
+        val = input_elements[i].value;
+        switch  (input_elements[i].id) {
+            case ('JSRed'):
+                redval += return_bg_val(val);
+                break;
+                
+            case ('JSBlue'):
+                blueval += return_bg_val(val);
+                break;
+                
+            case ('JSGreen'):
+                greenval += return_bg_val(val);
+                break;
+                
+            case ('JSOpacity'):
+                opacityval += return_opacity(val);
+                break;
+                
+            case ('jQRed'):
+                redval += return_bg_val(val);
+                break;
+                
+            case ('jQGreen'):
+                greenval += return_bg_val(val);
+                break;
+                
+            case ('jQBlue'):
+                blueval += return_bg_val(val);
+                break;
+                
+            case ('jQOpacity'):
+                opacityval += return_opacity(val);
+                break;
+        }
+    }
+        rgba_value = "rgba(" + redval + "," + greenval + "," + blueval + "," + Math.round(opacityval * 100) / 100 + ")";
+        console.log(rgba_value);
+        document.getElementsByTagName('header')[0].style.backgroundColor = String(rgba_value);
+        document.getElementById('rgb_disp').innerHTML = rgba_value;
+    }
+    
+    console.log("I have decided to put my notes in the console, instead of writing them in the main page. I decided to implement JavaScript on my page. I have learned a LARGE number of things, in an extremely painful manner. (1) the use of the HTML element 'onclick' is depreciated, (2) chrome is not the best JavaScript debugger - it will often throw an error that gives you no idea where the error is in your code, (3) navigating DOM elements can be really annoying - the DOM isn't what I would consider an 'intuitive' structure, and so getting to sub-elements, and sub-elements of sub-elements can be awfully difficult ... I spent a lot of time attempting to navigate as if the DOM was a tree-like structure that easily facilitated such movement, and found that it is 1000% easier and more effective to simply assign an ID, and use document.getElementById, (4) it is good practice to have IDs be unique, and they are more versitile than just making a TOC, (5) the # symbol is used in href, but also jQuery, (6) jQuery is a sort of library of Javascript, and they both execute on the client-side (ASP is used for server-side execution I understand, but I haven't looked into that at all), (7) stack overflow is ridiculously useful, (8) jQuery and Javascript can be mixed, (9) because the languages are client-side, different browsers interact with them differently - it's actually really interesting that all browsers include a JS processor (10) use the <script> tags to implement JS without the need for any installation of anything - which is a really cool feature when compared with python, (11) don't forget the break statements if you use switch, (12) because the languages are client-side, you can build them on top of pretty much any web interface [including GAE, as I did here], (13) programming [especially debugging] takes a LOT of time, (14) you can mix jQuery and JS - I passed a jQuery-generated DOM object to a JS function, (15) jQuery is good for what it's good for, but is much more limited than JS, (16) the JS console is probably the coolest thing ever, (17) Python is SOOOO much nicer/more intuitive to program in than JS, (18) it seems like JS doesn't run on the fully rendered Jinja2 template, just the base.html... I am basing this on the number of \n\nI think that's enough. I could go on.\n\nTry clicking the words (Red, Green, Blue, Opacity), some debug-type stuff will print out here.")
+</script>
+</body>

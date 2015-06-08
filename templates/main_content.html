@@ -1,0 +1,54 @@
+{% extends "header_footer.html" %}
+
+{% block toc %}
+
+<!-- for all nodes (all title+content elements) -->
+
+<nav role="navigation" class="toc">
+    <h1>Table of Contents</h1>
+     <p>
+        <form method="post">
+            <input type="submit" value="Delete the Database">
+            <input type="hidden" value="1" name="database_delete">
+        </form>
+    </p>
+    {% for x in lessons_list %}
+        <span class="toc_chapters">-- Unit {{x[0]}} --</span><br><br>
+        {% for y in x[1] %}
+            {% if toc_nodes_list[y] %}
+            <span class="toc_lessons">- <b>{{y}}</b> lesson notes -</span>
+                <br><span class="toc_small">(click <a href="/new?q={{y}}">to add new notes</a> to this lesson)</span>
+                <ul>
+                    {% for node in toc_nodes_list[y] %}
+                        <li><a href=#{{node.title.replace(" ","%20")}}>{{node.title}}</a>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</nav>    
+        
+{% endblock %}
+
+{% block main_content %}
+
+<h1>Notes</h1><span><a href="/new">Add New Content</a></span>
+
+{% for node in content %} <!-- for all nodes (all title+content elements) -->
+<div class="content_block"> <!-- create a div for the title, content, and edit link -->
+    <div class="edit_link"> <!-- create a DIV for the edit link redirect -->
+        <a href="/edit?node={{node.key.urlsafe()}}">edit</a> <!-- pass entity's urlsafe key to get query when link clicked -->
+    </div>
+    <div class="content_and_title"> <!-- create a DIV for the title and content -->
+        <span class = "content_info">Unit <b>{{node.unit}}</b>  |  Lesson <b>{{node.lesson}}</b></span>
+        <br>
+        <h2 id={{node.title.replace(" ","%20")}}>{{node.title}}</h2> <!-- write the title -->
+        <p class="content"> <!-- write the content -->
+            {{node.content}}
+        </p>
+    </div>
+</div>
+
+{% endfor %}
+    
+{% endblock %}

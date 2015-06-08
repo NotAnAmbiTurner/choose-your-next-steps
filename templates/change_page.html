@@ -1,0 +1,67 @@
+{% extends "header_footer.html" %}
+
+{% block change_page %}
+<span style="color:red" name="error_message">{{error | safe}}</span>
+<div class="change_page_form_container">
+    <!- gets the content and assigns it to node from the database, based on the query ->
+    <h1>Editions</h1>
+    <hr>
+    <br>
+    <div>
+        <form method="post">
+            Change the <b>title</b> here:
+            <input type="text" name="title" value="{{node.title}}">
+            <input type="hidden" name="title_change" value="1">
+            <p>
+            <input type="submit" value="submit and stay here" name="stay">
+            <input type="submit" value="submit and return to main page">
+        </form>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <div>
+        <form method="post">
+        Change the <b>lesson</b> associated with this note here:
+        <select name="select_lesson">
+            {% for x in lessons_list %}
+            <option>- Chapter {{x[0]}} -</option>
+            {% for y in x[1] %}
+            <option value="{{y}}" 
+            {% if y == node.lesson %}
+            selected
+            {% endif %}
+            >{{y}}</option>
+            {% endfor %}
+            {% endfor %}
+        </select>
+        <input type="hidden" name="lesson_change" value="1">
+        <input type="submit" value="submit and stay here" name="stay">
+        <input type="submit" value="submit and return to main page">
+        </form>
+    </div>
+    <br>
+    <hr>
+    <br>
+        <div>
+            <form method="post">
+                Change the <b>content</b> here:
+                <textarea type="text" name="content" rows="6" cols="150">{{node.content}}</textarea>
+                <input type="hidden" name="content_change" value="1">
+                <p>
+                <input type="submit" value="submit and stay here" name='stay'>
+                <input type="submit" value="submit and return to main page">
+            </form>
+            <hr>
+        </div>
+        <div>
+            <form method="post">
+                <input type="submit" value="return to main page without changes">
+                <input type="hidden" name="return_without_changes" value="1">
+            </form>
+        </div>
+    </div>
+    <p>urlsafe key: {{node.key.urlsafe()}}</p>
+    <p>node: {{node}}</p>
+</div>
+{% endblock %}

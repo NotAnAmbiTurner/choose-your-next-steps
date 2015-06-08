@@ -1,0 +1,47 @@
+{% extends "header_footer.html" %}
+
+{% block change_page %}
+<span style="color:red" name="error_message">{{error | safe}}</span>
+<div class="change_page_form_container">
+    <!- gets the content and assigns it to node from the database, based on the query ->
+    <h1>New Entity</h1>
+    <hr>
+    <br>
+    <div>
+        <form method="post">
+            <div class="edit_top">
+            <p>Add the <b>title</b> here:
+            <input type="text" name="title" value="" class = "title_box">
+            Which lesson was this note from?
+            <select name="select_lesson">
+                {% for x in lessons_list %}
+                <option>- Chapter {{x[0]}} -</option>
+                {% for y in x[1] %}
+                <option value="{{y}}" 
+                {% if y == from_toc %}
+                selected
+                {% endif %}
+                >{{y}}</option>
+                {% endfor %}
+                {% endfor %}
+            </select>
+            </div>
+            Add the <b>content</b> here:
+            <textarea type="text" name="content" rows="6" cols="150"></textarea>
+            <br>
+            <br>
+            <br>
+            <br>
+            <input type="submit" value="submit and stay here" name='stay'>
+            <input type="submit" value="submit and return to main page">
+        </form>
+    </div>
+    <hr>
+    <div>
+        <form method="post">
+            <input type="submit" value="return to main page without changes">
+            <input type="hidden" name="return_without_changes" value="1">
+        </form>
+    </div>
+</div>
+{% endblock %}
